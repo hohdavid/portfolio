@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>David Oh - Resume</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <nav>
+        <a href="../index.html">Home</a>
+        <a href="../projects/index.html">Projects</a>
+        <a href="index.html">CV</a>
+        <a href="../contact/index.html">Contact</a>
+        <a href="https://github.com/hohdavid" target="_blank">GitHub</a>
+    </nav>
+
+    <header>
+        <h1>David Oh</h1>
+        <p> 
+            <a href="https://www.linkedin.com/in/david-oh-5b169a249" target="_blank">LinkedIn</a> | 
+            <a href="https://github.com/hohdavid" target="_blank">GitHub</a>
+        </p>
+    </header>
+
+    <hr>
+
+    <section>
+        <h2>Education</h2>
+        <article>
+            <header>
+                <h3>University of California, San Diego</h3>
+                <p>Bachelor of Science in Data Science</p>
+                <p>Expected <time datetime="2027-06">June 2027</time></p>
+            </header>
+        </article>
+    </section>
+
+    <hr>
+
+    <section>
+        <h2>Experience & Applied Training</h2>
+        
+        <article>
+            <header>
+                <h3>Machine Learning Research Assistant</h3>
+                <p>Jinich Lab (Computational Biology) – UC San Diego</p>
+                <p><time datetime="2026-02">February 2026</time> – Present</p>
+            </header>
+            <ul>
+                <li>Architected a zero-shot classification pipeline utilizing CLIP to predict optimal protein purification protocols (lysis, elution, desalting) for novel sequences.</li>
+                <li>Developed and deployed a Retrieval-Augmented Generation (RAG) application on Hugging Face Spaces utilizing the Gemini API to synthesize retrieved biological data into actionable lab protocols.</li>
+                <li>Engineered an automated evaluation framework using an LLM-as-a-judge metric to benchmark generation accuracy against Adjusted Rand Index (ARI) clustering labels.</li>
+            </ul>
+        </article>
+
+        <article>
+            <header>
+                <h3>Generative AI For Business Program</h3>
+                <p>Microsoft</p>
+                <p><time datetime="2024-06">June 2024</time> – <time datetime="2024-10">Oct 2024</time></p>
+            </header>
+            <ul>
+                <li>Developed a sentiment analysis system for ExpressWay Logistics using Azure OpenAI APIs, optimizing Micro-F1 scores via deterministic, low-temperature prompt engineering.</li>
+                <li>Engineered balanced Few-Shot prompts in Python to mitigate majority label and recency biases, efficiently managing NLP token workloads with tiktoken.</li>
+                <li>Evaluated Zero-Shot vs. Few-Shot model architectures using statistical variance metrics to guarantee highly reliable, production-ready classification outputs.</li>
+            </ul>
+        </article>
+
+        <article>
+            <header>
+                <h3>Applied Data Science Professional Program</h3>
+                <p>MIT Professional Education</p>
+                <p><time datetime="2022-05">May 2022</time> – <time datetime="2022-09">Sept 2022</time></p>
+            </header>
+            <ul>
+                <li>Performed advanced Exploratory Data Analysis (EDA) on diverse industry datasets, identifying key correlations and data quality issues using Pandas and Seaborn.</li>
+                <li>Implemented unsupervised learning algorithms, including K-Means and Hierarchical Clustering, to derive actionable consumer insights from high-dimensional marketing data.</li>
+                <li>Developed and optimized recommendation engines and neural network architectures to solve complex business simulations, focusing on model interpretability and performance metrics.</li>
+            </ul>
+        </article>
+    </section>
+
+    <hr>
+
+    <section>
+        <h2>Projects</h2>
+        
+        <article>
+            <header>
+                <h3>ChaosMonkey-LLM</h3>
+                <p><em>Python, FastAPI, LangGraph, Gemini API, Docker SDK</em> | <time datetime="2026">2026</time></p>
+            </header>
+            <ul>
+                <li>Architected an adversarial-testing microservice in FastAPI with a 4-node LangGraph state machine (Critic, Attacker, Executor, Reporter) to auto-generate and run edge-case unit tests against user code.</li>
+                <li>Designed an ephemeral Docker sandbox with 10-second timeouts and immediate teardown to safely isolate AI-generated code, eliminating 429 crashes via throttling of a 15 RPM Gemini API budget.</li>
+                <li>Built a custom Gemini SDK parser to safely extract text and filter prompt injection, plus a reactive Vanilla JS/CSS dashboard rendering tracebacks and AI-generated reviews.</li>
+            </ul>
+        </article>
+
+        <article>
+            <header>
+                <h3>San Diego Housing Market Analyzer</h3>
+                <p><em>Python, Streamlit, BeautifulSoup, Pandas, Regex</em> | <time datetime="2026-02">Feb 2026</time> – <time datetime="2026-03">March 2026</time></p>
+            </header>
+            <ul>
+                <li>Engineered an automated web scraper using BeautifulSoup and Requests to extract live, paginated Craigslist rental listings, bypassing server blocks with timed requests.</li>
+                <li>Utilized advanced Regular Expressions (Regex) to parse highly unstructured HTML text, dynamically extracting key features including square footage, bedroom counts, and neighborhood data.</li>
+                <li>Developed an interactive web dashboard utilizing Streamlit and Pandas to clean raw data, filter outliers, and visualize real-time market trends and average rent prices across San Diego neighborhoods.</li>
+            </ul>
+        </article>
+    </section>
+
+    <hr>
+
+    <section>
+        <h2>Technical Skills</h2>
+        <ul>
+            <li><strong>Languages:</strong> Python, SQL, C++, R</li>
+            <li><strong>Libraries & Tools:</strong> PyTorch, Hugging Face, Gemini API, CLIP, Azure OpenAI, scikit-learn, pandas, NumPy, BeautifulSoup, Streamlit, Git</li>
+            <li><strong>Core Concepts:</strong> LLM Architecture, Retrieval-Augmented Generation (RAG), Zero-Shot Classification, Prompt Engineering, Model Evaluation, Unsupervised Learning, PCA, NLP, Web Scraping</li>
+        </ul>
+    </section>
+
+</body>
+</html>
