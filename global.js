@@ -4,16 +4,6 @@ function $$(selector, context = document) {
   return Array.from(context.querySelectorAll(selector));
 }
 
-// Step 2: Automatic current page link (replaced by Step 3)
-// let navLinks = $$("nav a");
-//
-// let currentLink = navLinks.find(
-//   (a) => a.host === location.host && a.pathname === location.pathname,
-// );
-//
-// currentLink?.classList.add('current');
-
-// Step 3: Automatic navigation menu
 let pages = [
   { url: '', title: 'Home' },
   { url: 'projects/', title: 'Projects' },
@@ -23,8 +13,8 @@ let pages = [
 ];
 
 const BASE_PATH = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-  ? "/"                  // Local server
-  : "/portfolio/";       // GitHub Pages repo name
+  ? "/"
+  : "/portfolio/";
 
 let nav = document.createElement('nav');
 document.body.prepend(nav);
@@ -51,7 +41,6 @@ for (let p of pages) {
   nav.append(a);
 }
 
-// Step 4: Dark mode switch
 document.body.insertAdjacentHTML(
   'afterbegin',
   `
@@ -82,7 +71,6 @@ select.addEventListener('input', function (event) {
   localStorage.colorScheme = event.target.value;
 });
 
-// Step 5: Better contact form
 let form = document.querySelector('form');
 
 form?.addEventListener('submit', function (event) {
@@ -99,10 +87,8 @@ form?.addEventListener('submit', function (event) {
   location.href = url;
 });
 
-// Lab 4, Step 1.2: Load project data from a JSON file
 export async function fetchJSON(url) {
   try {
-    // Fetch the JSON file from the given URL
     const response = await fetch(url);
     console.log(response);
 
@@ -114,5 +100,34 @@ export async function fetchJSON(url) {
     return data;
   } catch (error) {
     console.error('Error fetching or parsing JSON data:', error);
+  }
+}
+
+export function renderProjects(projects, containerElement, headingLevel = 'h2') {
+  if (!(containerElement instanceof Element)) {
+    console.error('renderProjects: containerElement is not a valid DOM element', containerElement);
+    return;
+  }
+
+  if (!/^h[1-6]$/i.test(headingLevel)) {
+    console.warn(`renderProjects: invalid headingLevel "${headingLevel}", using h2`);
+    headingLevel = 'h2';
+  }
+
+  containerElement.innerHTML = '';
+
+  if (!Array.isArray(projects) || projects.length === 0) {
+    containerElement.innerHTML = '<p>No projects to show yet.</p>';
+    return;
+  }
+
+  for (const project of projects) {
+    const article = document.createElement('article');
+    article.innerHTML = `
+      <${headingLevel}>${project.title ?? 'Untitled project'}</${headingLevel}>
+      <img src="${project.image ?? 'https://vis-society.github.io/labs/2/images/empty.svg'}" alt="${project.title ?? ''}">
+      <p>${project.description ?? ''}</p>
+    `;
+    containerElement.appendChild(article);
   }
 }
