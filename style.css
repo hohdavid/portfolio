@@ -196,3 +196,30 @@ h1 {
 .cv section > ul strong {
   color: var(--color-accent);
 }
+
+#profile-stats dl {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.25em 1em;
+  margin: 0;
+  padding: 1em;
+  text-align: center;
+  border: 1px solid oklch(50% 10% 200 / 40%);
+  border-radius: 0.5em;
+}
+
+#profile-stats dt {
+  grid-row: 1;
+  font-size: 80%;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: oklch(50% 2% 250);
+}
+
+#profile-stats dd {
+  grid-row: 2;
+  margin: 0;
+  font-size: 200%;
+  font-weight: bold;
+  color: var(--color-accent);
+}
