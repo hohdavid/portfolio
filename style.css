@@ -84,6 +84,20 @@ form button {
   margin: 0;
 }
 
+.project-year {
+  margin-top: 0.25em;
+  font-family: Baskerville, serif;
+  font-variant-numeric: oldstyle-nums;
+  font-style: italic;
+  color: oklch(50% 2% 250);
+}
+
+#projects-pie-plot {
+  max-width: 20em;
+  margin-block: 2em;
+  overflow: visible;
+}
+
 h1,
 h2,
 h3,
