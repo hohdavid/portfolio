@@ -8,34 +8,54 @@ renderProjects(projects, projectsContainer, 'h2');
 const projectsTitle = document.querySelector('.projects-title');
 projectsTitle.textContent = `${projects?.length ?? 0} Projects`;
 
-// Pie chart
-let arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
-let rolledData = d3.rollups(
-  projects,
-  (v) => v.length,
-  (d) => d.year,
-);
-let data = rolledData.map(([year, count]) => {
-  return { value: count, label: year };
-});
-let sliceGenerator = d3.pie().value((d) => d.value);
-let arcData = sliceGenerator(data);
-let arcs = arcData.map((d) => arcGenerator(d));
-let colors = d3.scaleOrdinal(d3.schemeTableau10);
+function renderPieChart(projectsGiven) {
+  let arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
+  let rolledData = d3.rollups(
+    projectsGiven,
+    (v) => v.length,
+    (d) => d.year,
+  );
+  let data = rolledData.map(([year, count]) => {
+    return { value: count, label: year };
+  });
+  let sliceGenerator = d3.pie().value((d) => d.value);
+  let arcData = sliceGenerator(data);
+  let arcs = arcData.map((d) => arcGenerator(d));
+  let colors = d3.scaleOrdinal(d3.schemeTableau10);
 
-arcs.forEach((arc, idx) => {
-  d3.select('#projects-pie-plot')
-    .append('path')
-    .attr('d', arc)
-    .attr('fill', colors(idx));
-});
+  let svg = d3.select('#projects-pie-plot');
+  svg.selectAll('path').remove();
+  let legend = d3.select('.legend');
+  legend.selectAll('li').remove();
 
-// Legend
-let legend = d3.select('.legend');
-data.forEach((d, idx) => {
-  legend
-    .append('li')
-    .attr('style', `--color:${colors(idx)}`)
-    .attr('class', 'legend-item')
-    .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
+  arcs.forEach((arc, idx) => {
+    svg.append('path').attr('d', arc).attr('fill', colors(idx));
+  });
+
+  data.forEach((d, idx) => {
+    legend
+      .append('li')
+      .attr('style', `--color:${colors(idx)}`)
+      .attr('class', 'legend-item')
+      .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
+  });
+}
+
+renderPieChart(projects);
+
+let query = '';
+let searchInput = document.querySelector('.searchBar');
+
+function setQuery(newQuery) {
+  query = newQuery;
+  return projects.filter((project) => {
+    let values = Object.values(project).join('\n').toLowerCase();
+    return values.includes(query.toLowerCase());
+  });
+}
+
+searchInput.addEventListener('input', (event) => {
+  let filteredProjects = setQuery(event.target.value);
+  renderProjects(filteredProjects, projectsContainer, 'h2');
+  renderPieChart(filteredProjects);
 });
