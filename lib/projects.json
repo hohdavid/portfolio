@@ -1,27 +1,27 @@
 [
   {
-    "title": "Et enim adipisicing excepteur",
+    "title": "DSC 106 Portfolio",
     "year": "2026",
-    "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-    "description": "Exercitation ex do consectetur amet ipsum exercitation aute anim aliqua proident occaecat sit labore consequat duis quis magna cupidatat tempor sunt adipisicing dolore ut est id ipsum culpa esse proident."
+    "image": "images/portfolio.svg",
+    "description": "A portfolio website created in DSC 106 which implements HTML, JavaScript, and CSS. It contains information such as projects, resume, and a contact page."
   },
   {
-    "title": "Dolore proident magna incididunt",
+    "title": "ChaosMonkey LLM",
     "year": "2026",
-    "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-    "description": "Eiusmod enim aliqua velit officia excepteur laborum qui qui deserunt quis consectetur qui reprehenderit minim cillum nostrud commodo et tempor et ex magna consectetur est id sunt officia est aute."
+    "image": "images/chaosmonkey.svg",
+    "description": "A tool that uses LLMs to try to break your code and find flaws. It uses an agentic workflow with four AI agents. The team picks apart your code and writes test cases to break it."
   },
   {
-    "title": "Culpa enim lorem anim",
+    "title": "San Diego Housing Market Analyzer",
     "year": "2026",
-    "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-    "description": "Aliqua irure pariatur deserunt enim qui occaecat commodo incididunt ullamco laboris reprehenderit aliqua laboris nisi eiusmod labore enim dolore sunt proident dolor consectetur dolor aliquip velit magna consequat duis esse."
+    "image": "images/housing.svg",
+    "description": "An interactive dashboard designed to track rental trends in San Diego using live data from Craigslist. It scrapes data off of Craigslist using BeautifulSoup and Requests."
   },
   {
-    "title": "Ex nulla minim do",
-    "year": "2025",
-    "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-    "description": "Fugiat incididunt amet ullamco anim incididunt velit velit nisi magna tempor veniam laboris sint in ad velit aute incididunt mollit ad adipisicing culpa sit pariatur labore magna occaecat in voluptate."
+    "title": "COGS 108 Final Project",
+    "year": "2026",
+    "image": "images/cogs108.svg",
+    "description": "Used Python and Jupyter Notebook to predict psychological distress through musical preference. Used a dataset from Kaggle and performed data cleaning and exploratory data analysis to form conclusions about the data."
   },
   {
     "title": "Officia et elit minim",
