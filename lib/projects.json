@@ -1,8 +1,16 @@
 [
   {
+    "title": "Bikewatching",
+    "year": "2026",
+    "image": "images/bikewatch.jpg",
+    "url": "https://hohdavid.github.io/bikewatch/",
+    "description": "An interactive map of Bluebikes traffic in Boston and Cambridge built with Mapbox GL JS and D3. Station circles are sized by trip volume and colored by arrivals vs. departures, with a time-of-day slider to filter trips."
+  },
+  {
     "title": "DSC 106 Portfolio",
     "year": "2026",
     "image": "images/portfolio.svg",
+    "url": "https://hohdavid.github.io/portfolio/",
     "description": "A portfolio website created in DSC 106 which implements HTML, JavaScript, and CSS. It contains information such as projects, resume, and a contact page."
   },
   {
