@@ -319,10 +319,7 @@ h1 {
   grid-auto-columns: minmax(0, 1fr);
   gap: 0.25em 1em;
   margin: 0;
-  padding: 1em;
-  text-align: center;
-  border: 1px solid oklch(50% 10% 200 / 40%);
-  border-radius: 0.5em;
+  padding: 1em 0;
 }
 
 .stats dt {
@@ -336,9 +333,8 @@ h1 {
 .stats dd {
   grid-row: 2;
   margin: 0;
-  font-size: 200%;
-  font-weight: bold;
-  color: var(--color-accent);
+  font-size: 250%;
+  font-weight: 300;
 }
 
 .gridlines .tick line {
@@ -425,9 +421,32 @@ circle.selected {
   font-size: 120%;
 }
 
+#commit-slider {
+  margin-block: 1.5em;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+  }
+
+  input[type="range"] {
+    flex: 1;
+  }
+
+  /* Date sits on its own line, right-aligned under the slider */
+  time {
+    display: block;
+    text-align: right;
+    margin-top: 0.5em;
+  }
+}
+
 #files {
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1fr 3fr;
+  row-gap: 1.5em;
+  margin-block: 1.5em;
 
   > div {
     grid-column: 1 / -1;
@@ -441,7 +460,8 @@ circle.selected {
 
   small {
     display: block;
-    font-size: 75%;
+    margin-top: 0.25em;
+    font-size: 85%;
     opacity: 0.6;
   }
 
@@ -451,15 +471,15 @@ circle.selected {
     flex-wrap: wrap;
     align-items: start;
     align-content: start;
-    gap: 0.15em;
-    padding-top: 0.6em;
+    gap: 0.25em;
+    padding-top: 0.4em;
     margin-left: 0;
   }
 }
 
 .loc {
   display: flex;
-  width: 0.5em;
+  width: 0.6em;
   aspect-ratio: 1;
   background: var(--color);
   border-radius: 50%;

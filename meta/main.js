@@ -57,42 +57,34 @@ function renderCommitInfo(data, commits) {
   // Create the dl element
   const dl = d3.select('#stats').append('dl').attr('class', 'stats');
 
-  // Add total LOC
-  dl.append('dt').html('Total <abbr title="Lines of code">LOC</abbr>');
-  dl.append('dd').text(data.length);
-
-  // Add total commits
-  dl.append('dt').text('Total commits');
+  // Number of commits
+  dl.append('dt').text('Commits');
   dl.append('dd').text(commits.length);
 
   // Number of files (distinct values)
-  const numFiles = d3.group(data, (d) => d.file).size;
   dl.append('dt').text('Files');
-  dl.append('dd').text(numFiles);
+  dl.append('dd').text(d3.group(data, (d) => d.file).size);
 
-  // Average file length (grouped aggregate)
+  // Total lines of code
+  dl.append('dt').html('Total <abbr title="Lines of code">LOC</abbr>');
+  dl.append('dd').text(data.length);
+
+  // Deepest indentation level
+  dl.append('dt').text('Max depth');
+  dl.append('dd').text(d3.max(data, (d) => d.depth));
+
+  // Longest line, in characters
+  dl.append('dt').text('Longest line');
+  dl.append('dd').text(d3.max(data, (d) => d.length));
+
+  // Length of the longest file, in lines
   const fileLengths = d3.rollups(
     data,
     (v) => d3.max(v, (v) => v.line),
     (d) => d.file,
   );
-  const averageFileLength = d3.mean(fileLengths, (d) => d[1]);
-  dl.append('dt').text('Avg file length');
-  dl.append('dd').text(Math.round(averageFileLength));
-
-  // Maximum depth (whole-dataset aggregate)
-  dl.append('dt').text('Max depth');
-  dl.append('dd').text(d3.max(data, (d) => d.depth));
-
-  // Time of day most work is done (min/max value)
-  const workByPeriod = d3.rollups(
-    data,
-    (v) => v.length,
-    (d) => new Date(d.datetime).toLocaleString('en', { dayPeriod: 'short' }),
-  );
-  const maxPeriod = d3.greatest(workByPeriod, (d) => d[1])?.[0];
-  dl.append('dt').text('Most active time');
-  dl.append('dd').text(maxPeriod);
+  dl.append('dt').text('Max lines');
+  dl.append('dd').text(d3.max(fileLengths, (d) => d[1]));
 }
 
 function renderTooltipContent(commit) {
@@ -347,11 +339,22 @@ renderScatterPlot(data, commits);
 
 // --- Step 1: filtering commits by time ---
 
-// Only commits up to this time are shown; starts at the first commit and is
-// moved forward by the scrollytelling below
-let commitMaxTime = commits[0].datetime;
+// Maps commit datetimes to 0-100 so the slider value can be converted to a
+// date (and back)
+let timeScale = d3
+  .scaleTime()
+  .domain([
+    d3.min(commits, (d) => d.datetime),
+    d3.max(commits, (d) => d.datetime),
+  ])
+  .range([0, 100]);
 
-// Will get updated as the user scrolls through the story
+// Maximum time to show, as a percentage of the total time span. Starts at
+// the first commit; moved by the slider or by scrolling through the story
+let commitProgress = 0;
+let commitMaxTime = timeScale.invert(commitProgress);
+
+// Will get updated as the user moves the slider or scrolls
 let filteredCommits = commits;
 
 // --- Step 2: unit visualization of files ---
@@ -376,7 +379,9 @@ function updateFileDisplay(filteredCommits) {
       // This code only runs when the div is initially rendered
       (enter) =>
         enter.append('div').call((div) => {
-          div.append('dt').append('code');
+          const dt = div.append('dt');
+          dt.append('code');
+          dt.append('small');
           div.append('dd');
         }),
     )
@@ -385,9 +390,8 @@ function updateFileDisplay(filteredCommits) {
     .order();
 
   // This code updates the div info
-  filesContainer
-    .select('dt > code')
-    .html((d) => `${d.name}<small>${d.lines.length} lines</small>`);
+  filesContainer.select('dt > code').text((d) => d.name);
+  filesContainer.select('dt > small').text((d) => `${d.lines.length} lines`);
 
   // append one div for each line, colored by technology
   filesContainer
@@ -399,8 +403,18 @@ function updateFileDisplay(filteredCommits) {
     .attr('style', (d) => `--color: ${colors(d.type)}`);
 }
 
-// Re-renders the chart, stats, and files for the current commitMaxTime
+const slider = document.getElementById('commit-progress');
+const timeElement = document.getElementById('commit-time');
+
+// Shared by the slider and the scrollytelling: re-renders the chart, stats,
+// and files for the current commitMaxTime
 function updateTimeFilter() {
+  timeElement.textContent = commitMaxTime.toLocaleString('en', {
+    dateStyle: 'long',
+    timeStyle: 'short',
+  });
+  timeElement.dateTime = commitMaxTime.toISOString();
+
   filteredCommits = commits.filter((d) => d.datetime <= commitMaxTime);
   const filteredData = data.filter((d) => d.datetime <= commitMaxTime);
 
@@ -409,7 +423,14 @@ function updateTimeFilter() {
   updateFileDisplay(filteredCommits);
 }
 
-updateTimeFilter(); // start the page showing only the first commit
+function onTimeSliderChange() {
+  commitProgress = Number(slider.value);
+  commitMaxTime = timeScale.invert(commitProgress);
+  updateTimeFilter();
+}
+
+slider.addEventListener('input', onTimeSliderChange);
+onTimeSliderChange(); // start the page showing only the first commit
 
 // --- Step 3: scrollytelling ---
 
@@ -441,6 +462,8 @@ d3.select('#scatter-story')
 function onStepEnter(response) {
   // D3 attached each commit object to its step element
   commitMaxTime = response.element.__data__.datetime;
+  commitProgress = timeScale(commitMaxTime);
+  slider.value = commitProgress; // keep the slider in sync with the scroll
   updateTimeFilter();
 }
 
