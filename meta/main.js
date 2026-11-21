@@ -1,4 +1,5 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
+import scrollama from 'https://cdn.jsdelivr.net/npm/scrollama@3.2.0/+esm';
 
 // Global so brushing helpers can map commits to screen coordinates
 let xScale;
@@ -44,7 +45,9 @@ function processCommits(data) {
       });
 
       return ret;
-    });
+    })
+    // Oldest first, so the story steps (and slider) go in chronological order
+    .sort((a, b) => a.datetime - b.datetime);
 }
 
 function renderCommitInfo(data, commits) {
@@ -408,9 +411,9 @@ function updateFileDisplay(filteredCommits) {
 const slider = document.getElementById('commit-progress');
 const timeElement = document.getElementById('commit-time');
 
-function onTimeSliderChange() {
-  commitProgress = Number(slider.value);
-  commitMaxTime = timeScale.invert(commitProgress);
+// Shared by the slider and the scrollytelling: re-renders everything for
+// the current commitMaxTime
+function updateTimeFilter() {
   timeElement.textContent = commitMaxTime.toLocaleString('en', {
     dateStyle: 'long',
     timeStyle: 'short',
@@ -425,5 +428,54 @@ function onTimeSliderChange() {
   updateFileDisplay(filteredCommits);
 }
 
+function onTimeSliderChange() {
+  commitProgress = Number(slider.value);
+  commitMaxTime = timeScale.invert(commitProgress);
+  updateTimeFilter();
+}
+
 slider.addEventListener('input', onTimeSliderChange);
 onTimeSliderChange(); // initialize the time display on page load
+
+// --- Step 3: scrollytelling ---
+
+d3.select('#scatter-story')
+  .selectAll('.step')
+  .data(commits)
+  .join('div')
+  .attr('class', 'step')
+  .html(
+    (d, i) => `
+      On ${d.datetime.toLocaleString('en', {
+        dateStyle: 'full',
+        timeStyle: 'short',
+      })},
+      I made <a href="${d.url}" target="_blank">${
+        i > 0 ? 'another glorious commit' : 'my first commit, and it was glorious'
+      }</a>.
+      I edited ${d.totalLines} lines across ${
+        d3.rollups(
+          d.lines,
+          (D) => D.length,
+          (d) => d.file,
+        ).length
+      } files.
+      Then I looked over all I had made, and I saw that it was very good.
+    `,
+  );
+
+function onStepEnter(response) {
+  // D3 attached each commit object to its step element
+  commitMaxTime = response.element.__data__.datetime;
+  commitProgress = timeScale(commitMaxTime);
+  slider.value = commitProgress; // keep the slider in sync with the scroll
+  updateTimeFilter();
+}
+
+const scroller = scrollama();
+scroller
+  .setup({
+    container: '#scrolly-1',
+    step: '#scrolly-1 .step',
+  })
+  .onStepEnter(onStepEnter);
