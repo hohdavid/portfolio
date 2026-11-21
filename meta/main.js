@@ -46,12 +46,12 @@ function processCommits(data) {
 
       return ret;
     })
-    // Oldest first, so the story steps (and slider) go in chronological order
+    // Oldest first, so the story steps go in chronological order
     .sort((a, b) => a.datetime - b.datetime);
 }
 
 function renderCommitInfo(data, commits) {
-  // Clear any previous stats so this can be re-run when the slider moves
+  // Clear any previous stats so this can be re-run as the user scrolls
   d3.select('#stats').selectAll('*').remove();
 
   // Create the dl element
@@ -345,22 +345,13 @@ let commits = processCommits(data);
 renderCommitInfo(data, commits);
 renderScatterPlot(data, commits);
 
-// --- Step 1: evolution slider ---
+// --- Step 1: filtering commits by time ---
 
-// Maximum time to show, as a percentage of the total time span
-let commitProgress = 100;
+// Only commits up to this time are shown; starts at the first commit and is
+// moved forward by the scrollytelling below
+let commitMaxTime = commits[0].datetime;
 
-// Maps commit datetimes to 0-100 so we can convert slider values to dates
-let timeScale = d3
-  .scaleTime()
-  .domain([
-    d3.min(commits, (d) => d.datetime),
-    d3.max(commits, (d) => d.datetime),
-  ])
-  .range([0, 100]);
-let commitMaxTime = timeScale.invert(commitProgress);
-
-// Will get updated as user changes slider
+// Will get updated as the user scrolls through the story
 let filteredCommits = commits;
 
 // --- Step 2: unit visualization of files ---
@@ -408,18 +399,8 @@ function updateFileDisplay(filteredCommits) {
     .attr('style', (d) => `--color: ${colors(d.type)}`);
 }
 
-const slider = document.getElementById('commit-progress');
-const timeElement = document.getElementById('commit-time');
-
-// Shared by the slider and the scrollytelling: re-renders everything for
-// the current commitMaxTime
+// Re-renders the chart, stats, and files for the current commitMaxTime
 function updateTimeFilter() {
-  timeElement.textContent = commitMaxTime.toLocaleString('en', {
-    dateStyle: 'long',
-    timeStyle: 'short',
-  });
-  timeElement.dateTime = commitMaxTime.toISOString();
-
   filteredCommits = commits.filter((d) => d.datetime <= commitMaxTime);
   const filteredData = data.filter((d) => d.datetime <= commitMaxTime);
 
@@ -428,14 +409,7 @@ function updateTimeFilter() {
   updateFileDisplay(filteredCommits);
 }
 
-function onTimeSliderChange() {
-  commitProgress = Number(slider.value);
-  commitMaxTime = timeScale.invert(commitProgress);
-  updateTimeFilter();
-}
-
-slider.addEventListener('input', onTimeSliderChange);
-onTimeSliderChange(); // initialize the time display on page load
+updateTimeFilter(); // start the page showing only the first commit
 
 // --- Step 3: scrollytelling ---
 
@@ -467,8 +441,6 @@ d3.select('#scatter-story')
 function onStepEnter(response) {
   // D3 attached each commit object to its step element
   commitMaxTime = response.element.__data__.datetime;
-  commitProgress = timeScale(commitMaxTime);
-  slider.value = commitProgress; // keep the slider in sync with the scroll
   updateTimeFilter();
 }
 

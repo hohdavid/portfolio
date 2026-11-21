@@ -425,28 +425,6 @@ circle.selected {
   font-size: 120%;
 }
 
-#commit-slider {
-  display: flex;
-  align-items: baseline;
-  gap: 1em;
-
-  label {
-    flex: 1;
-    display: flex;
-    align-items: baseline;
-    gap: 0.5em;
-  }
-
-  input[type="range"] {
-    flex: 1;
-  }
-
-  time {
-    margin-left: auto;
-    white-space: nowrap;
-  }
-}
-
 #files {
   display: grid;
   grid-template-columns: 1fr 4fr;
@@ -499,6 +477,9 @@ circle.selected {
 
 #scatter-story {
   position: relative;
+  /* Room below the last step so it can still scroll past the middle of the
+     screen (where Scrollama triggers) on tall windows */
+  padding-bottom: 50vh;
 }
 
 #scatter-plot {
@@ -511,5 +492,5 @@ circle.selected {
 
 /* Space the commit descriptions out so each one gets its own scroll step */
 #scatter-story .step {
-  padding-bottom: 50vh;
+  padding-bottom: 1em;
 }
