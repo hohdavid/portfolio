@@ -508,6 +508,23 @@ circle.selected {
   left: 0;
   bottom: auto;
   height: 50vh;
+
+  /* Smaller stats so all six fit in the half-width column */
+  #stats .stats {
+    padding-top: 0.5em;
+
+    dt {
+      font-size: 70%;
+    }
+
+    dd {
+      font-size: 175%;
+    }
+  }
+
+  h3 {
+    margin-block: 0.5em;
+  }
 }
 
 /* Space the commit descriptions out so each one gets its own scroll step */
